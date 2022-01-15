@@ -21,11 +21,11 @@ export class ItemsController {
 			}, HttpStatus.OK).getResponse();
 		}
 		
-		res.status(HttpStatus.OK);
+		res.status(HttpStatus.NO_CONTENT);
 		return new HttpException({
 			message: 'No content',
-			status: HttpStatus.OK
-		}, HttpStatus.OK).getResponse();
+			status: HttpStatus.NO_CONTENT
+		}, HttpStatus.NO_CONTENT).getResponse();
 		
 	}
 	

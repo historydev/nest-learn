@@ -16,8 +16,7 @@ export class ItemsService {
 	
 	update(item:ItemDto):ItemDto {
 		const index = this.items.findIndex(el => el.id === item.id);
-		if(!!index) this.items[index] = item;
-		console.log(item);
+		if(index !== -1) this.items[index] = item;
 		return item
 	}
 	
