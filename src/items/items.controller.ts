@@ -25,7 +25,7 @@ export class ItemsController {
 		return new HttpException({
 			message: 'No content',
 			status: HttpStatus.NO_CONTENT
-		}, HttpStatus.NO_CONTENT).getResponse();
+		}, HttpStatus.NO_CONTENT).getResponse()
 		
 	}
 	
