@@ -2,9 +2,9 @@ import { Test } from '@nestjs/testing';
 import { ItemsController } from './items/items.controller';
 import { ItemsService } from './items/items.service';
 import * as request from 'supertest';
-import { INestApplication } from "@nestjs/common";
+import {HttpStatus, INestApplication} from "@nestjs/common";
 
-describe('ItemsModule', () => {
+describe('AppModule', () => {
 	let itemsController: ItemsController;
 	let itemsService: ItemsService;
 	let app: INestApplication;
@@ -22,35 +22,70 @@ describe('ItemsModule', () => {
 		await app.init();
 	});
 	
-	describe('End-points', () => {
+	describe('Items endpoints', () => {
 		
-		it('/GET Status 200', () => {
+		it('test add/get/remove/error', async () => {
 			
-			return request(app.getHttpServer())
-				.get('/')
-				.expect(200)
-				.expect({
-					"items": [
-						{
-							id: '0',
-							title: '',
-							message: ''
-						}
-					]
-				});
+				await request(app.getHttpServer())
+					.post('/')
+					.send({
+						id: '0',
+						title: '',
+						message: ''
+					})
+					.expect(HttpStatus.CREATED)
+					.expect({
+						id: '0',
+						title: '',
+						message: ''
+					});
 			
-		});
-		
-		it('/GET Status 500', () => {
+				await request(app.getHttpServer())
+					.get('/')
+					.expect(HttpStatus.OK)
+					.expect({
+						items: [
+							{
+								id: '0',
+								title: '',
+								message: ''
+							}
+						]
+					});
 			
-			return request(app.getHttpServer())
-				.get('/')
-				.expect(500)
-				.expect({
-					items: 'Items length: 0',
-					status: 500
-				});
+				await request(app.getHttpServer())
+					.put('/')
+					.send({
+						id: '0',
+						title: 'title',
+						message: 'My text'
+					})
+					.expect(HttpStatus.ACCEPTED)
+					.expect({
+						id: '0',
+						title: 'title',
+						message: 'My text'
+					});
+			
+				await request(app.getHttpServer())
+					.delete('/')
+					.send({
+						id: '0'
+					})
+					.expect(HttpStatus.ACCEPTED)
+					.expect('0');
+			
+				await request(app.getHttpServer())
+					.get('/')
+					.expect(HttpStatus.OK)
+					.expect({
+						message: 'No content',
+						status: HttpStatus.OK
+					});
 			
 		});
 	});
+	
+	afterEach(() => false);
+	
 });

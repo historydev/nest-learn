@@ -10,21 +10,20 @@ export class ItemsService {
 	}
 	
 	create(item:ItemDto):ItemDto {
-		item.id = `${Math.floor(Math.random() * 100)}`;
 		this.items.push(item);
 		return item;
 	}
 	
 	update(item:ItemDto):ItemDto {
-		const changeItem = this.items.find(el => el.id === item.id);
-		for(let prop in changeItem) {
-			changeItem[prop] = item[prop];
-		}
-		return changeItem
+		const index = this.items.findIndex(el => el.id === item.id);
+		if(!!index) this.items[index] = item;
+		console.log(item);
+		return item
 	}
 	
-	delete(id:string):ItemDto[] {
-		return this.items = this.items.filter(el => el.id !== id);
+	delete(id:string):string {
+		this.items = this.items.filter(el => el.id !== id);
+		return id
 	}
 	
 }

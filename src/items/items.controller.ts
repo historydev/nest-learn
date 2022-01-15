@@ -1,4 +1,4 @@
-import {Controller, Get, HttpException, HttpStatus, Param, Post, Res} from "@nestjs/common";
+import {Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Res} from "@nestjs/common";
 import {Response} from "express";
 import {ItemsService} from "./items.service";
 import {ItemDto} from "./dto/item.dto";
@@ -21,18 +21,30 @@ export class ItemsController {
 			}, HttpStatus.OK).getResponse();
 		}
 		
-		res.status(HttpStatus.INTERNAL_SERVER_ERROR);
-		
+		res.status(HttpStatus.OK);
 		return new HttpException({
-			items: 'Items length: ' + items.length,
-			status: HttpStatus.INTERNAL_SERVER_ERROR
-		}, HttpStatus.INTERNAL_SERVER_ERROR).getResponse();
+			message: 'No content',
+			status: HttpStatus.OK
+		}, HttpStatus.OK).getResponse();
 		
 	}
 	
 	@Post()
-	create(@Param() params):ItemDto {
-		return this.itemsService.create(params);
+	create(@Res({passthrough: true}) res: Response, @Body() dto:ItemDto):object {
+		res.status(HttpStatus.CREATED);
+		return this.itemsService.create(dto);
+	}
+	
+	@Delete()
+	delete(@Res({passthrough: true}) res:Response, @Body() body):string {
+		res.status(HttpStatus.ACCEPTED);
+		return this.itemsService.delete(body.id);
+	}
+	
+	@Put()
+	update(@Res({passthrough: true}) res: Response, @Body() dto:ItemDto):ItemDto {
+		res.status(HttpStatus.ACCEPTED);
+		return this.itemsService.update(dto);
 	}
 	
 }
