@@ -44,7 +44,7 @@ export class ItemsController {
 	@Put()
 	update(@Res({passthrough: true}) res: Response, @Body() dto:ItemDto):ItemDto {
 		res.status(HttpStatus.ACCEPTED);
-		return this.itemsService.update(dto)S
+		return this.itemsService.update(dto);
 	}
 	
 }
