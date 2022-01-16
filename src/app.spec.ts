@@ -29,15 +29,15 @@ describe('AppModule', () => {
 				await request(app.getHttpServer())
 					.post('/')
 					.send({
-						id: '1',
-						title: 'Test title',
-						message: 'Test message'
+						id: '0',
+						title: '',
+						message: ''
 					})
 					.expect(HttpStatus.CREATED)
 					.expect({
-						id: '1',
-						title: 'Test title',
-						message: 'Test message'
+						id: '0',
+						title: '',
+						message: ''
 					});
 			
 				await request(app.getHttpServer())
@@ -46,9 +46,9 @@ describe('AppModule', () => {
 					.expect({
 						items: [
 							{
-								id: '1',
-								title: 'Test title',
-								message: 'Test message'
+								id: '0',
+								title: '',
+								message: ''
 							}
 						]
 					});
@@ -56,29 +56,32 @@ describe('AppModule', () => {
 				await request(app.getHttpServer())
 					.put('/')
 					.send({
-						id: '1',
-						title: 'New test title',
-						message: 'New test message'
+						id: '0',
+						title: 'title',
+						message: 'My text'
 					})
 					.expect(HttpStatus.ACCEPTED)
 					.expect({
-						id: '1',
-						title: 'New test title',
-						message: 'New test message'
+						id: '0',
+						title: 'title',
+						message: 'My text'
 					});
 			
 				await request(app.getHttpServer())
 					.delete('/')
 					.send({
-						id: '1'
+						id: '0'
 					})
 					.expect(HttpStatus.ACCEPTED)
-					.expect('1');
+					.expect('0');
 			
 				await request(app.getHttpServer())
 					.get('/')
-					.expect(HttpStatus.NO_CONTENT)
-					.expect({});
+					.expect(HttpStatus.OK)
+					.expect({
+						message: 'No content',
+						status: HttpStatus.OK
+					});
 			
 		});
 	});

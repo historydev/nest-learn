@@ -25,7 +25,7 @@ export class ItemsController {
 		return new HttpException({
 			message: 'No content',
 			status: HttpStatus.NO_CONTENT
-		}, HttpStatus.NO_CONTENT).getResponse()
+		}, HttpStatus.NO_CONTENT).getResponse();
 		
 	}
 	
@@ -44,7 +44,7 @@ export class ItemsController {
 	@Put()
 	update(@Res({passthrough: true}) res: Response, @Body() dto:ItemDto):ItemDto {
 		res.status(HttpStatus.ACCEPTED);
-		return this.itemsService.update(dto);
+		return this.itemsService.update(dto)S
 	}
 	
 }
