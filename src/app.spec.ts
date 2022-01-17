@@ -77,11 +77,7 @@ describe('AppModule', () => {
 			
 				await request(app.getHttpServer())
 					.get('/')
-					.expect(HttpStatus.OK)
-					.expect({
-						message: 'No content',
-						status: HttpStatus.OK
-					});
+					.expect(HttpStatus.NO_CONTENT, {})
 			
 		});
 	});

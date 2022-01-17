@@ -1,50 +1,48 @@
-import {Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Res} from "@nestjs/common";
+import {
+	Body,
+	Controller,
+	Delete,
+	Get,
+	HttpCode,
+	HttpException,
+	HttpStatus,
+	Param,
+	Post,
+	Put, Req,
+	Res, UseFilters, UseInterceptors, UsePipes
+} from "@nestjs/common";
 import {Response} from "express";
 import {ItemsService} from "./items.service";
 import {ItemDto} from "./dto/item.dto";
+import {JoiValidationPipe} from "./items.validation.pipe";
+import {id, item} from "./items.shemes";
 
 @Controller()
-
 export class ItemsController {
 	
 	constructor(private readonly itemsService: ItemsService) {}
 	
 	@Get()
-	getAll(@Res({passthrough: true}) res: Response):string | object {
-		
-		const items = this.itemsService.getAll();
-		
-		if(!!items.length) {
-			res.status(HttpStatus.OK);
-			return new HttpException({
-				items: items
-			}, HttpStatus.OK).getResponse();
-		}
-		
-		res.status(HttpStatus.NO_CONTENT);
-		return new HttpException({
-			message: 'No content',
-			status: HttpStatus.NO_CONTENT
-		}, HttpStatus.NO_CONTENT).getResponse();
-		
+	async getAll(@Res() res: Response) {
+		throw new HttpException(this.itemsService.getAll(), HttpStatus.OK);
 	}
 	
 	@Post()
-	create(@Res({passthrough: true}) res: Response, @Body() dto:ItemDto):object {
-		res.status(HttpStatus.CREATED);
-		return this.itemsService.create(dto);
+	@UsePipes(new JoiValidationPipe(item))
+	create(@Res() res: Response, @Body() dto:ItemDto) {
+		throw new HttpException(this.itemsService.create(dto), HttpStatus.CREATED);
 	}
 	
 	@Delete()
-	delete(@Res({passthrough: true}) res:Response, @Body() body):string {
-		res.status(HttpStatus.ACCEPTED);
-		return this.itemsService.delete(body.id);
+	@UsePipes(new JoiValidationPipe(id))
+	delete(@Res() res:Response, @Body() body) {
+		throw new HttpException(this.itemsService.delete(body.id), HttpStatus.ACCEPTED);
 	}
 	
 	@Put()
-	update(@Res({passthrough: true}) res: Response, @Body() dto:ItemDto):ItemDto {
-		res.status(HttpStatus.ACCEPTED);
-		return this.itemsService.update(dto);
+	@UsePipes(new JoiValidationPipe(item))
+	update(@Res() res: Response, @Body() dto:ItemDto) {
+		throw new HttpException(this.itemsService.update(dto), HttpStatus.ACCEPTED);
 	}
 	
 }
